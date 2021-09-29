@@ -138,6 +138,9 @@ $adh = new Post();
       .postser{
       	margin-left: 120px;
       }
+      .card{
+
+      }
 
 	</style>
 	<?php if($_SESSION['usertype']=="admin"){ ?>
@@ -187,6 +190,8 @@ $adh = new Post();
     	
     $posttitle=$_POST['posttitle'];
     $content=$_POST['content'];
+    
+
     $hmk=$adh->registerposts($posttitle,$content);
     if ($hmk) {
     	echo "successfull";
@@ -202,7 +207,7 @@ $adh = new Post();
 <div class="container">
    <section id="postform">
    	<font face="sans">
-   	<form method="POST" action="">
+   	<form method="POST" action="" enctype="multipart/form-data">
    		<h1>Add new Post</h1>
    		<br><br>
    		<label for="post title"><strong>Post Title</strong></label>
@@ -211,6 +216,9 @@ $adh = new Post();
  <label for="content"><strong>Content</strong></label>
 <input type="content" name="content" required><br><br> 
   
+  <input type="file" name="uploadfile" value=""/>
+
+
 <button type="submit" name="post"><strong>Post</strong> </button>
 <button type="submit" name="draft"><strong>Save Draft</strong> </button>
 <br>
@@ -222,10 +230,48 @@ $adh = new Post();
      </div>
  </div>
 
-	 <?php } elseif($_SESSION['usertype']=="user") { 
+	 <?php } elseif($_SESSION['usertype']=="user") { ?>
+
+	 	 <div class="topnav">
+         <p style="color:white;"><font size="+1" color="white" face="sans serif">ASTERISK INTERNATIONAL GROUP</font></p>
+    <img src="includes/logo2.jpg" alt="asterisk logo" align="left" width="180" height="100" padding-top="-6px"/>
+    	<div class="admin">	 
+   <font size="+1" color="white" face="verdana"><?php echo   "Welcome to ur page!" ;?> </font><img src="includes/admim.jpg" alt="admin image">
+</div>
+</div>
 	  
-         $hlt=$adh->displayposts();
-     } ?>
+      <?php  $hlt = $adh->selectposts(); 
+
+        if ($hlt->num_rows > 0) {
+  
+  while ($a= mysqli_fetch_assoc($hlt)) {
+    
+    $posttitle = stripslashes($a['posttitle']);
+    $content = stripslashes($a['content']);
+
+            ?>
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <br>
+   <br>
+   <div class="col d-flex justify-content-center">
+ <div class="card" style="width: 20rem;">
+ 	<br> <div class="card-body mt-4">
+        <br><h5 class="card-title"> <?php echo $posttitle; ?></h5>
+        <br><p class="card-text"> <?php echo $content; ?> </p>
+ </div>
+</div>
+</div>
+       <?php } ?>
+       <div></div>
+      <?php } ?>
+
+<?php } else { ?>
+ 
+ <p class="card-text"> <?php echo "<p> No Entry has been made </p>"; ?> </p>
+
+<?php } ?>
+
 </div>
 </body>
 </html>
